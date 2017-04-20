@@ -20,7 +20,7 @@ namespace CoreSportsStore.Infrastructure
         [HtmlAttributeNotBound]
         public ViewContext ViewContext { get; set; }
 
-        public PagingInfo PagingModel { get; set; }
+        public PagingInfo PageModel { get; set; }
 
         public string PageAction { get; set; }
 
@@ -28,10 +28,10 @@ namespace CoreSportsStore.Infrastructure
         {
             var urlHelper = urlHelperFactory.GetUrlHelper(ViewContext);
             var result = new TagBuilder("div");
-            for (var i = 0; i <= PagingModel.TotalPages; i++)
+            for (var i = 1; i <= PageModel.TotalPages; i++)
             {
                 var tag = new TagBuilder("a");
-                tag.Attributes["href"] = urlHelper.Action(new UrlActionContext { Action = PageAction, Values = new { page = 1 }});
+                tag.Attributes["href"] = urlHelper.Action(new UrlActionContext { Action = PageAction, Values = new { page = i }});
                 tag.InnerHtml.Append(i.ToString());
                 result.InnerHtml.AppendHtml(tag);
             }
