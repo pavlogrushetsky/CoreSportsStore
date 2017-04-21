@@ -24,6 +24,14 @@ namespace CoreSportsStore.Infrastructure
 
         public string PageAction { get; set; }
 
+        public bool PageClassesEnabled { get; set; }
+
+        public string PageClass { get; set; }
+
+        public string PageClassNormal { get; set; }
+
+        public string PageClassSelected { get; set; }
+
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             var urlHelper = urlHelperFactory.GetUrlHelper(ViewContext);
@@ -32,6 +40,11 @@ namespace CoreSportsStore.Infrastructure
             {
                 var tag = new TagBuilder("a");
                 tag.Attributes["href"] = urlHelper.Action(new UrlActionContext { Action = PageAction, Values = new { page = i }});
+                if (PageClassesEnabled)
+                {
+                    tag.AddCssClass(PageClass);
+                    tag.AddCssClass(i == PageModel.CurrentPage ? PageClassSelected : PageClassNormal);
+                }
                 tag.InnerHtml.Append(i.ToString());
                 result.InnerHtml.AppendHtml(tag);
             }
