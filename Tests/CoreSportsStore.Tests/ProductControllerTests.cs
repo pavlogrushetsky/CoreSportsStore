@@ -29,7 +29,7 @@ namespace CoreSportsStore.Tests
                 PageSize = 3
             };
 
-            var result = controller.List(2).ViewData.Model as ProductsListViewModel;
+            var result = controller.List("Soccer", 2).ViewData.Model as ProductsListViewModel;
 
             var prodArray = result.Products.ToArray();
 
