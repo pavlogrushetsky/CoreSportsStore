@@ -2,7 +2,7 @@
 
 namespace CoreSportsStore.Models
 {
-    public class FakeProductRepository : IProductRepository
+    public class FakeProductRepository /* : IProductRepository */
     {
         public IEnumerable<Product> Products => new List<Product>
         {

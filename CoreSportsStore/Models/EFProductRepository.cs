@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace CoreSportsStore.Models
 {
@@ -12,5 +13,25 @@ namespace CoreSportsStore.Models
         }
 
         public IEnumerable<Product> Products => context.Products;
+
+        public void SaveProduct(Product product)
+        {
+            if (product.ProductID == 0)
+            {
+                context.Products.Add(product);
+            }
+            else
+            {
+                var entry = context.Products.FirstOrDefault(p => p.ProductID == product.ProductID);
+                if (entry != null)
+                {
+                    entry.Name = product.Name;
+                    entry.Description = product.Description;
+                    entry.Price = product.Price;
+                    entry.Category = entry.Category;
+                }
+            }
+            context.SaveChanges();
+        }
     }
 }
