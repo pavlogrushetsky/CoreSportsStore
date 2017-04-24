@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using CoreSportsStore.Infrastructure;
 using CoreSportsStore.Models;
 using CoreSportsStore.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -9,17 +8,19 @@ namespace CoreSportsStore.Controllers
     public class CartController : Controller
     {
         private readonly IProductRepository repository;
+        private readonly Cart cart;
 
-        public CartController(IProductRepository repository)
+        public CartController(IProductRepository repository, Cart cart)
         {
             this.repository = repository;
+            this.cart = cart;
         }
 
         public ViewResult Index(string returnUrl)
         {
             return View(new CartIndexViewModel
             {
-                Cart = GetCart(),
+                Cart = cart,
                 ReturnUrl = returnUrl
             });
         }
@@ -29,12 +30,8 @@ namespace CoreSportsStore.Controllers
             var product = repository.Products
                 .FirstOrDefault(p => p.ProductID == productId);
 
-            if (product == null)
-                return RedirectToAction("Index", new {returnUrl});
-
-            var cart = GetCart();
-            cart.AddItem(product, 1);
-            SaveCart(cart);
+            if (product != null)
+                cart.AddItem(product, 1);
 
             return RedirectToAction("Index", new {returnUrl});
         }
@@ -44,24 +41,10 @@ namespace CoreSportsStore.Controllers
         {
             var product = repository.Products
                 .FirstOrDefault(p => p.ProductID == productId);
-            if (product == null)
-                return RedirectToAction("Index", new {returnUrl});
+            if (product != null)
+                cart.RemoveLine(product);
 
-            var cart = GetCart();
-            cart.RemoveLine(product);
-            SaveCart(cart);
             return RedirectToAction("Index", new { returnUrl });
-        }
-
-        private Cart GetCart()
-        {
-            var cart = HttpContext.Session.GetJson<Cart>("Cart") ?? new Cart();
-            return cart;
-        }
-
-        private void SaveCart(Cart cart)
-        {
-            HttpContext.Session.SetJson("Cart", cart);
         }
     }
 }
