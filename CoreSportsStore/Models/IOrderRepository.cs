@@ -4,7 +4,7 @@ namespace CoreSportsStore.Models
 {
     public interface IOrderRepository
     {
-        IEnumerable<Order> Orders { get; set; }
+        IEnumerable<Order> Orders { get; }
         void SaveOrder(Order order);
     }
 }
