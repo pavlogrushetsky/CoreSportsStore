@@ -33,5 +33,16 @@ namespace CoreSportsStore.Models
             }
             context.SaveChanges();
         }
+
+        public Product DeleteProduct(int productID)
+        {
+            var entry = context.Products.FirstOrDefault(p => p.ProductID == productID);
+            if (entry != null)
+            {
+                context.Products.Remove(entry);
+                context.SaveChanges();
+            }
+            return entry;
+        }
     }
 }
